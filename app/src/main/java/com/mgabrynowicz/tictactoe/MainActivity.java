@@ -11,18 +11,15 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
 
 
-
     private Button gameGrid0, gameGrid1, gameGrid2, gameGrid3, gameGrid4, gameGrid5, gameGrid6, gameGrid7, gameGrid8;
     private TicTacToe game = new TicTacToe();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        game.newGame();
-
 
         gameGrid0 = (Button) findViewById(R.id.gameGrid0);
         gameGrid1 = (Button) findViewById(R.id.gameGrid1);
@@ -34,8 +31,7 @@ public class MainActivity extends AppCompatActivity {
         gameGrid7 = (Button) findViewById(R.id.gameGrid7);
         gameGrid8 = (Button) findViewById(R.id.gameGrid8);
 
-
-
+        game.newGame();
 
 
     }
@@ -46,8 +42,19 @@ public class MainActivity extends AppCompatActivity {
 
         String tag = view.getTag().toString();
         int gridNumber = Integer.parseInt(tag);
-        game.placeSignOnTheBoard(gridNumber, (Button) view);
+        game.placeSignOnTheBoard(gridNumber, (Button) view, this);
 
+
+    }
+
+    @OnClick(R.id.newGameButton)
+    public void newGameClick(View view) {
+        game.newGame();
+        Button[] gameGridArray = new Button[]{gameGrid0, gameGrid1, gameGrid2, gameGrid3, gameGrid4, gameGrid5, gameGrid6, gameGrid7, gameGrid8};
+        for (Button tmpButton : gameGridArray) {
+
+            tmpButton.setText("Button");
+        }
 
 
     }

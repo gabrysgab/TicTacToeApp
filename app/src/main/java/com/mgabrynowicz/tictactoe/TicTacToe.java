@@ -1,6 +1,8 @@
 package com.mgabrynowicz.tictactoe;
 
+import android.content.Context;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -14,6 +16,7 @@ public class TicTacToe {
     private Player firstPlayer;
     private Player secondPlayer;
     private GameGrid gameGrid;
+    private Boolean winner = null;
 
     public TicTacToe() {
         this.firstPlayer = new Player(true);
@@ -45,9 +48,9 @@ public class TicTacToe {
         }
     }
 
-    public void placeSignOnTheBoard(int position, Button button) {
+    public void placeSignOnTheBoard(int position, Button button, Context context) {
 
-        if(!endOfGame()) {
+        if (!endOfGame()) {
 
             if (!(this.gameGrid.getGameGrid()[position] == null)) {
                 return;
@@ -57,6 +60,16 @@ public class TicTacToe {
             setGridSign(button);
             changeTurn();
         }
+        if (endOfGame()) {
+            if(this.winner == null) {
+
+                Toast.makeText(context, "Draw", Toast.LENGTH_SHORT).show();
+            } else {
+                announceWinner(this.winner, context);
+            }
+
+        }
+
 
     }
 
@@ -68,79 +81,84 @@ public class TicTacToe {
     private Boolean checkIfSomeoneWon() {
 
         Boolean winnerSign = null;
-        if(gameGrid.getGameGrid()[0] != null || gameGrid.getGameGrid()[1] != null || gameGrid.getGameGrid()[2] != null) {
+        if (gameGrid.getGameGrid()[0] != null && gameGrid.getGameGrid()[1] != null && gameGrid.getGameGrid()[2] != null) {
             if (gameGrid.getGameGrid()[0].equals(gameGrid.getGameGrid()[1]) && gameGrid.getGameGrid()[1].equals(gameGrid.getGameGrid()[2])) {
 
-                winnerSign = whoWhon(gameGrid.getGameGrid()[0]);
+                winnerSign = gameGrid.getGameGrid()[0];
 
             }
         }
-        if(gameGrid.getGameGrid()[3] != null || gameGrid.getGameGrid()[4] != null || gameGrid.getGameGrid()[5] != null) {
+        if (gameGrid.getGameGrid()[3] != null && gameGrid.getGameGrid()[4] != null && gameGrid.getGameGrid()[5] != null) {
             if (gameGrid.getGameGrid()[3].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[5])) {
 
-                winnerSign = whoWhon(gameGrid.getGameGrid()[3]);
+                winnerSign = gameGrid.getGameGrid()[3];
             }
         }
-        if(gameGrid.getGameGrid()[6] != null || gameGrid.getGameGrid()[7] != null || gameGrid.getGameGrid()[8] != null) {
+        if (gameGrid.getGameGrid()[6] != null && gameGrid.getGameGrid()[7] != null && gameGrid.getGameGrid()[8] != null) {
             if (gameGrid.getGameGrid()[6].equals(gameGrid.getGameGrid()[7]) && gameGrid.getGameGrid()[7].equals(gameGrid.getGameGrid()[8])) {
 
-                winnerSign = whoWhon(gameGrid.getGameGrid()[6]);
+                winnerSign = gameGrid.getGameGrid()[6];
 
             }
         }
 
-        if(gameGrid.getGameGrid()[0] != null || gameGrid.getGameGrid()[3] != null || gameGrid.getGameGrid()[6] != null) {
+        if (gameGrid.getGameGrid()[0] != null && gameGrid.getGameGrid()[3] != null && gameGrid.getGameGrid()[6] != null) {
             if (gameGrid.getGameGrid()[0].equals(gameGrid.getGameGrid()[3]) && gameGrid.getGameGrid()[3].equals(gameGrid.getGameGrid()[6])) {
 
-                winnerSign = whoWhon(gameGrid.getGameGrid()[6]);
+                winnerSign = gameGrid.getGameGrid()[6];
 
             }
         }
 
-        if(gameGrid.getGameGrid()[1] != null || gameGrid.getGameGrid()[4] != null || gameGrid.getGameGrid()[7] != null) {
+        if (gameGrid.getGameGrid()[1] != null && gameGrid.getGameGrid()[4] != null && gameGrid.getGameGrid()[7] != null) {
             if (gameGrid.getGameGrid()[1].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[7])) {
 
-                winnerSign = whoWhon(gameGrid.getGameGrid()[1]);
+                winnerSign = gameGrid.getGameGrid()[1];
 
             }
         }
 
-        if(gameGrid.getGameGrid()[2] != null || gameGrid.getGameGrid()[5] != null || gameGrid.getGameGrid()[8] != null) {
+        if (gameGrid.getGameGrid()[2] != null && gameGrid.getGameGrid()[5] != null && gameGrid.getGameGrid()[8] != null) {
             if (gameGrid.getGameGrid()[2].equals(gameGrid.getGameGrid()[5]) && gameGrid.getGameGrid()[5].equals(gameGrid.getGameGrid()[8])) {
 
-                winnerSign = whoWhon(gameGrid.getGameGrid()[2]);
+                winnerSign = gameGrid.getGameGrid()[2];
 
             }
         }
 
-        if(gameGrid.getGameGrid()[0] != null || gameGrid.getGameGrid()[4] != null || gameGrid.getGameGrid()[8] != null) {
+        if (gameGrid.getGameGrid()[0] != null && gameGrid.getGameGrid()[4] != null && gameGrid.getGameGrid()[8] != null) {
             if (gameGrid.getGameGrid()[0].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[8])) {
 
-                winnerSign = whoWhon(gameGrid.getGameGrid()[0]);
+                winnerSign = gameGrid.getGameGrid()[0];
 
             }
         }
-        if(gameGrid.getGameGrid()[2] != null || gameGrid.getGameGrid()[4] != null || gameGrid.getGameGrid()[6] != null) {
+        if (gameGrid.getGameGrid()[2] != null && gameGrid.getGameGrid()[4] != null && gameGrid.getGameGrid()[6] != null) {
             if (gameGrid.getGameGrid()[2].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[6])) {
 
-                winnerSign = whoWhon(gameGrid.getGameGrid()[2]);
+                winnerSign = gameGrid.getGameGrid()[2];
 
             }
         }
 
+        this.winner = winnerSign;
         return winnerSign;
 
 
     }
 
-    private Boolean whoWhon(Boolean sign) {
+    private void announceWinner(Boolean sign, Context context) {
 
-        if (sign.equals(firstPlayer.getSign())) {
+        if (sign.equals(Boolean.TRUE)) {
 
-            return firstPlayer.getSign();
+
+            Toast.makeText(context, "O Won", Toast.LENGTH_SHORT).show();
+
+
         } else {
 
-            return secondPlayer.getSign();
+            Toast.makeText(context, "X Won", Toast.LENGTH_SHORT).show();
+
         }
 
     }
@@ -148,16 +166,13 @@ public class TicTacToe {
     private boolean endOfGame() {
 
 
-
         Boolean winner = checkIfSomeoneWon();
         boolean boardFull = true;
 
-        if(winner != null) {
+        if (winner != null) {
+            return true;
 
-            if (winner.equals(firstPlayer.getSign()) || winner.equals(secondPlayer.getSign())) {
 
-                return true;
-            }
         }
         for (Boolean tmpBoolean : gameGrid.getGameGrid()) {
 
@@ -181,6 +196,7 @@ public class TicTacToe {
 
         chooseStartingPlayer();
         this.gameGrid = new GameGrid();
+        this.winner = null;
 
     }
 
