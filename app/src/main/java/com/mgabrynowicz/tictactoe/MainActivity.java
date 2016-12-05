@@ -1,6 +1,12 @@
 package com.mgabrynowicz.tictactoe;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button gameGrid0, gameGrid1, gameGrid2, gameGrid3, gameGrid4, gameGrid5, gameGrid6, gameGrid7, gameGrid8;
     private TicTacToe game = new TicTacToe();
+    private Button[] gameGridArray;
+    private AnimatorSet set;
 
 
     @Override
@@ -30,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
         gameGrid6 = (Button) findViewById(R.id.gameGrid6);
         gameGrid7 = (Button) findViewById(R.id.gameGrid7);
         gameGrid8 = (Button) findViewById(R.id.gameGrid8);
+        gameGridArray = new Button[]{gameGrid0, gameGrid1, gameGrid2, gameGrid3, gameGrid4, gameGrid5, gameGrid6, gameGrid7, gameGrid8};
+
+
+
+
 
         game.newGame();
 
@@ -40,9 +53,39 @@ public class MainActivity extends AppCompatActivity {
 
     public void onGridClick(View view) {
 
-        String tag = view.getTag().toString();
-        int gridNumber = Integer.parseInt(tag);
-        game.placeSignOnTheBoard(gridNumber, (Button) view, this);
+//
+//        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotating_around_central_point);
+//        view.startAnimation(animation);
+
+
+
+        game.placeSignOnTheBoard((Button) view, this);
+        if (game.isGameOver()) {
+
+            for (Button tmpButton : gameGridArray) {
+                if (game.getWinnerButtons() != null) {
+                    for (int winnerButtonTag : game.getWinnerButtons()) {
+                        if (Integer.valueOf(tmpButton.getTag().toString()) == winnerButtonTag) {
+
+                            tmpButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+
+
+                        }
+                    }
+                }
+
+            }
+
+
+        }
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(200);
+// włączenie wibracji na 1 sekundę
+
+
+
+        ObjectAnimator anim = ObjectAnimator.ofFloat(view, "rotationY", 180f, 0f );
+        anim.start();
 
 
     }
@@ -50,10 +93,11 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.newGameButton)
     public void newGameClick(View view) {
         game.newGame();
-        Button[] gameGridArray = new Button[]{gameGrid0, gameGrid1, gameGrid2, gameGrid3, gameGrid4, gameGrid5, gameGrid6, gameGrid7, gameGrid8};
+
         for (Button tmpButton : gameGridArray) {
 
-            tmpButton.setText("Button");
+            tmpButton.setText("");
+            tmpButton.getBackground().clearColorFilter();
         }
 
 

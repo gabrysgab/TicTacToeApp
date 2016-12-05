@@ -17,6 +17,8 @@ public class TicTacToe {
     private Player secondPlayer;
     private GameGrid gameGrid;
     private Boolean winner = null;
+    private int[] winnerButtons;
+    private boolean gameOver = false;
 
     public TicTacToe() {
         this.firstPlayer = new Player(true);
@@ -37,7 +39,6 @@ public class TicTacToe {
 
     }
 
-
     private void changeTurn() {
 
         if (currentPlayer.equals(firstPlayer)) {
@@ -48,9 +49,14 @@ public class TicTacToe {
         }
     }
 
-    public void placeSignOnTheBoard(int position, Button button, Context context) {
+    public void placeSignOnTheBoard(Button button, Context context) {
 
-        if (!endOfGame()) {
+        String tag = button.getTag().toString();
+        int position = Integer.parseInt(tag);
+
+
+
+        if (!isGameOver()) {
 
             if (!(this.gameGrid.getGameGrid()[position] == null)) {
                 return;
@@ -58,14 +64,16 @@ public class TicTacToe {
 
             this.gameGrid.getGameGrid()[position] = currentPlayer.getSign();
             setGridSign(button);
+            endOfGame();
             changeTurn();
         }
-        if (endOfGame()) {
-            if(this.winner == null) {
+        if (isGameOver()) {
+            if (this.winner == null) {
 
                 Toast.makeText(context, "Draw", Toast.LENGTH_SHORT).show();
             } else {
                 announceWinner(this.winner, context);
+
             }
 
         }
@@ -78,13 +86,14 @@ public class TicTacToe {
         this.currentPlayer = currentPlayer;
     }
 
-    private Boolean checkIfSomeoneWon() {
+    private void checkIfSomeoneWon() {
 
         Boolean winnerSign = null;
         if (gameGrid.getGameGrid()[0] != null && gameGrid.getGameGrid()[1] != null && gameGrid.getGameGrid()[2] != null) {
             if (gameGrid.getGameGrid()[0].equals(gameGrid.getGameGrid()[1]) && gameGrid.getGameGrid()[1].equals(gameGrid.getGameGrid()[2])) {
 
                 winnerSign = gameGrid.getGameGrid()[0];
+                this.winnerButtons = new int[]{0, 1, 2};
 
             }
         }
@@ -92,12 +101,14 @@ public class TicTacToe {
             if (gameGrid.getGameGrid()[3].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[5])) {
 
                 winnerSign = gameGrid.getGameGrid()[3];
+                this.winnerButtons = new int[]{3, 4, 5};
             }
         }
         if (gameGrid.getGameGrid()[6] != null && gameGrid.getGameGrid()[7] != null && gameGrid.getGameGrid()[8] != null) {
             if (gameGrid.getGameGrid()[6].equals(gameGrid.getGameGrid()[7]) && gameGrid.getGameGrid()[7].equals(gameGrid.getGameGrid()[8])) {
 
                 winnerSign = gameGrid.getGameGrid()[6];
+                this.winnerButtons = new int[]{6, 7, 8};
 
             }
         }
@@ -106,6 +117,7 @@ public class TicTacToe {
             if (gameGrid.getGameGrid()[0].equals(gameGrid.getGameGrid()[3]) && gameGrid.getGameGrid()[3].equals(gameGrid.getGameGrid()[6])) {
 
                 winnerSign = gameGrid.getGameGrid()[6];
+                this.winnerButtons = new int[]{0, 3, 6};
 
             }
         }
@@ -114,6 +126,7 @@ public class TicTacToe {
             if (gameGrid.getGameGrid()[1].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[7])) {
 
                 winnerSign = gameGrid.getGameGrid()[1];
+                this.winnerButtons = new int[]{1, 4, 7};
 
             }
         }
@@ -122,6 +135,7 @@ public class TicTacToe {
             if (gameGrid.getGameGrid()[2].equals(gameGrid.getGameGrid()[5]) && gameGrid.getGameGrid()[5].equals(gameGrid.getGameGrid()[8])) {
 
                 winnerSign = gameGrid.getGameGrid()[2];
+                this.winnerButtons = new int[]{2, 5, 8};
 
             }
         }
@@ -130,6 +144,7 @@ public class TicTacToe {
             if (gameGrid.getGameGrid()[0].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[8])) {
 
                 winnerSign = gameGrid.getGameGrid()[0];
+                this.winnerButtons = new int[]{0, 4, 8};
 
             }
         }
@@ -137,12 +152,12 @@ public class TicTacToe {
             if (gameGrid.getGameGrid()[2].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[6])) {
 
                 winnerSign = gameGrid.getGameGrid()[2];
+                this.winnerButtons = new int[]{2, 4, 6};
 
             }
         }
 
         this.winner = winnerSign;
-        return winnerSign;
 
 
     }
@@ -163,14 +178,13 @@ public class TicTacToe {
 
     }
 
-    private boolean endOfGame() {
+    public boolean endOfGame() {
 
-
-        Boolean winner = checkIfSomeoneWon();
         boolean boardFull = true;
+        checkIfSomeoneWon();
 
-        if (winner != null) {
-            return true;
+        if (this.winner != null) {
+            return this.gameOver = true;
 
 
         }
@@ -184,10 +198,10 @@ public class TicTacToe {
         }
 
         if (boardFull) {
-            return true;
-        } else {
-            return false;
+            return this.gameOver = true;
         }
+
+        return this.gameOver;
 
 
     }
@@ -197,6 +211,8 @@ public class TicTacToe {
         chooseStartingPlayer();
         this.gameGrid = new GameGrid();
         this.winner = null;
+        this.winnerButtons = null;
+        this.gameOver = false;
 
     }
 
@@ -212,5 +228,13 @@ public class TicTacToe {
         button.setText(sign);
     }
 
+    public boolean isGameOver() {
+        return gameOver;
+    }
 
+    public int[] getWinnerButtons() {
+        return winnerButtons;
+
+
+    }
 }
