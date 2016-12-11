@@ -4,6 +4,9 @@ import android.content.Context;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -15,26 +18,28 @@ public class TicTacToe {
     private Player currentPlayer;
     private Player firstPlayer;
     private Player secondPlayer;
+    private ComputerPlayer computerPlayer;
     private GameGrid gameGrid;
     private Boolean winner = null;
     private int[] winnerButtons;
     private boolean gameOver = false;
+    private List<Integer> emptyGrids;
+
+    private int[][] winStates = {
+            {0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6}
+    };
 
     public TicTacToe() {
         this.firstPlayer = new Player(true);
         this.secondPlayer = new Player(false);
 
+
     }
 
 
     private void chooseStartingPlayer() {
-        Random random = new Random();
-        int randomPlayer = random.nextInt(1);
-        if (randomPlayer == 0) {
-            currentPlayer = firstPlayer;
-        } else {
-            currentPlayer = secondPlayer;
-        }
+
+        currentPlayer = firstPlayer;
 
 
     }
@@ -51,10 +56,11 @@ public class TicTacToe {
 
     public void placeSignOnTheBoard(Button button, Context context) {
 
+        int position = 0;
+
+
         String tag = button.getTag().toString();
-        int position = Integer.parseInt(tag);
-
-
+        position = Integer.parseInt(tag);
 
         if (!isGameOver()) {
 
@@ -63,7 +69,57 @@ public class TicTacToe {
             }
 
             this.gameGrid.getGameGrid()[position] = currentPlayer.getSign();
+            this.emptyGrids.remove(this.emptyGrids.indexOf(position));
             setGridSign(button);
+            endOfGame();
+            changeTurn();
+        }
+        if (isGameOver()) {
+            if (this.winner == null) {
+
+                Toast.makeText(context, "Draw", Toast.LENGTH_SHORT).show();
+            } else {
+                announceWinner(this.winner, context);
+
+            }
+
+        }
+
+
+    }
+
+
+    public void placeSignOnBoardAI(Button[] gameGridArray, Context context) {
+        int position = 0;
+
+        if(checkForWinningMove() != null) {
+
+            position = checkForWinningMove();
+        }
+        else {
+            Random randomGenerator = new Random();
+
+
+            if (emptyGrids.size() == 1) {
+
+                position = emptyGrids.get(0);
+            } else if (emptyGrids.isEmpty()) {
+                //do nothing
+
+            } else {
+                int index = randomGenerator.nextInt(emptyGrids.size());
+                position = emptyGrids.get(index);
+            }
+        }
+        if (!isGameOver()) {
+
+            if (!(this.gameGrid.getGameGrid()[position] == null)) {
+                return;
+            }
+
+            this.gameGrid.getGameGrid()[position] = currentPlayer.getSign();
+            setGridSign(gameGridArray[position]);
+            this.emptyGrids.remove(this.emptyGrids.indexOf(position));
             endOfGame();
             changeTurn();
         }
@@ -88,79 +144,47 @@ public class TicTacToe {
 
     private void checkIfSomeoneWon() {
 
-        Boolean winnerSign = null;
-        if (gameGrid.getGameGrid()[0] != null && gameGrid.getGameGrid()[1] != null && gameGrid.getGameGrid()[2] != null) {
-            if (gameGrid.getGameGrid()[0].equals(gameGrid.getGameGrid()[1]) && gameGrid.getGameGrid()[1].equals(gameGrid.getGameGrid()[2])) {
 
-                winnerSign = gameGrid.getGameGrid()[0];
-                this.winnerButtons = new int[]{0, 1, 2};
+        for (int[] win : winStates) {
 
+            if (gameGrid.getGameGrid()[win[0]] == null || gameGrid.getGameGrid()[win[1]] == null || gameGrid.getGameGrid()[win[2]] == null) {
+                continue;
+            }
+            if (gameGrid.getGameGrid()[win[0]].equals(gameGrid.getGameGrid()[win[1]]) && gameGrid.getGameGrid()[win[1]].equals(gameGrid.getGameGrid()[win[2]])) {
+
+                this.winner = gameGrid.getGameGrid()[win[0]];
+                this.winnerButtons = new int[]{win[0], win[1], win[2]};
             }
         }
-        if (gameGrid.getGameGrid()[3] != null && gameGrid.getGameGrid()[4] != null && gameGrid.getGameGrid()[5] != null) {
-            if (gameGrid.getGameGrid()[3].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[5])) {
-
-                winnerSign = gameGrid.getGameGrid()[3];
-                this.winnerButtons = new int[]{3, 4, 5};
-            }
-        }
-        if (gameGrid.getGameGrid()[6] != null && gameGrid.getGameGrid()[7] != null && gameGrid.getGameGrid()[8] != null) {
-            if (gameGrid.getGameGrid()[6].equals(gameGrid.getGameGrid()[7]) && gameGrid.getGameGrid()[7].equals(gameGrid.getGameGrid()[8])) {
-
-                winnerSign = gameGrid.getGameGrid()[6];
-                this.winnerButtons = new int[]{6, 7, 8};
-
-            }
-        }
-
-        if (gameGrid.getGameGrid()[0] != null && gameGrid.getGameGrid()[3] != null && gameGrid.getGameGrid()[6] != null) {
-            if (gameGrid.getGameGrid()[0].equals(gameGrid.getGameGrid()[3]) && gameGrid.getGameGrid()[3].equals(gameGrid.getGameGrid()[6])) {
-
-                winnerSign = gameGrid.getGameGrid()[6];
-                this.winnerButtons = new int[]{0, 3, 6};
-
-            }
-        }
-
-        if (gameGrid.getGameGrid()[1] != null && gameGrid.getGameGrid()[4] != null && gameGrid.getGameGrid()[7] != null) {
-            if (gameGrid.getGameGrid()[1].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[7])) {
-
-                winnerSign = gameGrid.getGameGrid()[1];
-                this.winnerButtons = new int[]{1, 4, 7};
-
-            }
-        }
-
-        if (gameGrid.getGameGrid()[2] != null && gameGrid.getGameGrid()[5] != null && gameGrid.getGameGrid()[8] != null) {
-            if (gameGrid.getGameGrid()[2].equals(gameGrid.getGameGrid()[5]) && gameGrid.getGameGrid()[5].equals(gameGrid.getGameGrid()[8])) {
-
-                winnerSign = gameGrid.getGameGrid()[2];
-                this.winnerButtons = new int[]{2, 5, 8};
-
-            }
-        }
-
-        if (gameGrid.getGameGrid()[0] != null && gameGrid.getGameGrid()[4] != null && gameGrid.getGameGrid()[8] != null) {
-            if (gameGrid.getGameGrid()[0].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[8])) {
-
-                winnerSign = gameGrid.getGameGrid()[0];
-                this.winnerButtons = new int[]{0, 4, 8};
-
-            }
-        }
-        if (gameGrid.getGameGrid()[2] != null && gameGrid.getGameGrid()[4] != null && gameGrid.getGameGrid()[6] != null) {
-            if (gameGrid.getGameGrid()[2].equals(gameGrid.getGameGrid()[4]) && gameGrid.getGameGrid()[4].equals(gameGrid.getGameGrid()[6])) {
-
-                winnerSign = gameGrid.getGameGrid()[2];
-                this.winnerButtons = new int[]{2, 4, 6};
-
-            }
-        }
-
-        this.winner = winnerSign;
-
-
     }
+    private Integer checkForWinningMove() {
+        Integer winningMove = null;
+
+        for(Integer tmpIndex : emptyGrids) {
+
+            gameGrid.getGameGrid()[tmpIndex] = true;
+
+
+
+
+            for (int[] win : winStates) {
+
+                if (gameGrid.getGameGrid()[win[0]] == null || gameGrid.getGameGrid()[win[1]] == null || gameGrid.getGameGrid()[win[2]] == null) {
+                    continue;
+                }
+                if (gameGrid.getGameGrid()[win[0]].equals(gameGrid.getGameGrid()[win[1]]) && gameGrid.getGameGrid()[win[1]].equals(gameGrid.getGameGrid()[win[2]])) {
+
+                    winningMove = tmpIndex;
+                    gameGrid.getGameGrid()[tmpIndex] = null;
+                    return winningMove;
+
+                }
+            }
+            gameGrid.getGameGrid()[tmpIndex] = null;
+        }
+        return winningMove;
+    }
+
 
     private void announceWinner(Boolean sign, Context context) {
 
@@ -212,6 +236,7 @@ public class TicTacToe {
         this.gameGrid = new GameGrid();
         this.winner = null;
         this.winnerButtons = null;
+        this.emptyGrids = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
         this.gameOver = false;
 
     }
@@ -234,7 +259,9 @@ public class TicTacToe {
 
     public int[] getWinnerButtons() {
         return winnerButtons;
+    }
 
-
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 }

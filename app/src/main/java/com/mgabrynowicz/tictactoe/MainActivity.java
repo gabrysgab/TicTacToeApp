@@ -2,11 +2,9 @@ package com.mgabrynowicz.tictactoe;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -53,33 +51,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void onGridClick(View view) {
 
-//
+
 //        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotating_around_central_point);
 //        view.startAnimation(animation);
+        Button clickedButton = (Button) view;
 
 
-
-        game.placeSignOnTheBoard((Button) view, this);
-        if (game.isGameOver()) {
-
-            for (Button tmpButton : gameGridArray) {
-                if (game.getWinnerButtons() != null) {
-                    for (int winnerButtonTag : game.getWinnerButtons()) {
-                        if (Integer.valueOf(tmpButton.getTag().toString()) == winnerButtonTag) {
-
-                            tmpButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
-
-
-                        }
-                    }
-                }
-
-            }
-
-
+        if(clickedButton.getText().length() == 0) {
+            game.placeSignOnTheBoard((Button) view, this);
+            game.placeSignOnBoardAI(gameGridArray, this);
         }
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(200);
+        higlightWinningButtons();
+
+//        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//        vibrator.vibrate(200);
 // włączenie wibracji na 1 sekundę
 
 
@@ -98,6 +83,31 @@ public class MainActivity extends AppCompatActivity {
 
             tmpButton.setText("");
             tmpButton.getBackground().clearColorFilter();
+        }
+
+
+    }
+
+    public void higlightWinningButtons() {
+
+
+        if (game.isGameOver()) {
+
+            for (Button tmpButton : gameGridArray) {
+                if (game.getWinnerButtons() != null) {
+                    for (int winnerButtonTag : game.getWinnerButtons()) {
+                        if (Integer.valueOf(tmpButton.getTag().toString()) == winnerButtonTag) {
+
+                            tmpButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+
+
+                        }
+                    }
+                }
+
+            }
+
+
         }
 
 
