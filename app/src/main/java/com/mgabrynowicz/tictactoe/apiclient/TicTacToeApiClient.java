@@ -1,5 +1,6 @@
 package com.mgabrynowicz.tictactoe.apiclient;
 
+import com.mgabrynowicz.tictactoe.User.model.LoginRequest;
 import com.mgabrynowicz.tictactoe.User.model.LoginResponse;
 import com.mgabrynowicz.tictactoe.User.model.RegisterRequest;
 
@@ -29,5 +30,11 @@ public interface TicTacToeApiClient {
 
     Call<ResponseBody> logout(@Header("X-BB-SESSION") String token);
 
+    @POST("/login")
+    @Headers({
+            "X-BAASBOX-APPCODE: 1234567890",
+            "Content-Type: application/json"
+    })
+    Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
 }

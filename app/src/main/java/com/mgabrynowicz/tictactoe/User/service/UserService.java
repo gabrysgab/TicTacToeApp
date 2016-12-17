@@ -2,6 +2,7 @@ package com.mgabrynowicz.tictactoe.User.service;
 
 import android.util.Log;
 
+import com.mgabrynowicz.tictactoe.User.model.LoginRequest;
 import com.mgabrynowicz.tictactoe.User.model.LoginResponse;
 import com.mgabrynowicz.tictactoe.User.model.RegisterRequest;
 import com.mgabrynowicz.tictactoe.apiclient.TicTacToeApiClient;
@@ -54,6 +55,19 @@ public class UserService {
             Log.d("LOGOUT_ERROR", "Logout error");
         }
         token = null;
+    }
+
+    public void login(LoginRequest loginRequest) throws IOException {
+
+        Response<LoginResponse> response = ticTacToeApiClient.login(loginRequest).execute();
+
+        if (!response.isSuccessful()) {
+
+            throw new RuntimeException("failed");
+        }
+        LoginResponse loginResponse = response.body();
+        token = loginResponse.getData().getToken();
+
 
 
     }

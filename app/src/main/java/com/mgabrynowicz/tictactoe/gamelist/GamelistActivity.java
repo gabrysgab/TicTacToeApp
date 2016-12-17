@@ -28,9 +28,8 @@ public class GamelistActivity extends AppCompatActivity implements LogoutAsyncTa
     public void logout() {
 
         new LogoutAsyncTask(this).execute();
-
-
     }
+
 
     @Override
     public void onLogoutCompleted() {
