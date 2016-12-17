@@ -28,7 +28,8 @@
             android:height="@dimen/tic_tac_toe_button_size"
             android:tag="0"
             android:textSize="@dimen/tic_tac_toe_font_size"
-            android:text="" />
+            android:text=""
+            />
 
         <Button
             android:id="@+id/gameGrid1"

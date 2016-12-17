@@ -38,22 +38,13 @@ public class MainActivity extends AppCompatActivity {
         gameGrid8 = (Button) findViewById(R.id.gameGrid8);
         gameGridArray = new Button[]{gameGrid0, gameGrid1, gameGrid2, gameGrid3, gameGrid4, gameGrid5, gameGrid6, gameGrid7, gameGrid8};
 
-
-
-
-
         game.newGame();
-
-
     }
-
     @OnClick({R.id.gameGrid0, R.id.gameGrid1, R.id.gameGrid2, R.id.gameGrid3, R.id.gameGrid4, R.id.gameGrid5, R.id.gameGrid6, R.id.gameGrid7, R.id.gameGrid8})
 
     public void onGridClick(View view) {
 
 
-//        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotating_around_central_point);
-//        view.startAnimation(animation);
         Button clickedButton = (Button) view;
 
 
@@ -62,11 +53,6 @@ public class MainActivity extends AppCompatActivity {
             game.placeSignOnBoardAI(gameGridArray, this);
         }
         higlightWinningButtons();
-
-//        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-//        vibrator.vibrate(200);
-// włączenie wibracji na 1 sekundę
-
 
 
         ObjectAnimator anim = ObjectAnimator.ofFloat(view, "rotationY", 180f, 0f );
