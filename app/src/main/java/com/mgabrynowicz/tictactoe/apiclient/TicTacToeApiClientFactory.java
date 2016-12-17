@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class TicTacToeApiClientFactory {
 
 
-    public TicTacToeApiClient createNewsApiClient() {
+    public TicTacToeApiClient createTicTacToeApiClient() {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();

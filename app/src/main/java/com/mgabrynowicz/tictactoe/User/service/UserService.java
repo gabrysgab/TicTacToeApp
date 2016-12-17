@@ -25,7 +25,7 @@ public class UserService {
 
     private UserService() {
         TicTacToeApiClientFactory ticTacToeApiClientFactory = new TicTacToeApiClientFactory();
-        ticTacToeApiClient = ticTacToeApiClientFactory.createNewsApiClient();
+        ticTacToeApiClient = ticTacToeApiClientFactory.createTicTacToeApiClient();
     }
 
     public static UserService getInstance() {
@@ -67,8 +67,9 @@ public class UserService {
         }
         LoginResponse loginResponse = response.body();
         token = loginResponse.getData().getToken();
+    }
 
-
-
+    public String getToken() {
+        return token;
     }
 }
