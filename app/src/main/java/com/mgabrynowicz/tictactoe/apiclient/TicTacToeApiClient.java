@@ -3,6 +3,7 @@ package com.mgabrynowicz.tictactoe.apiclient;
 import com.mgabrynowicz.tictactoe.User.model.LoginRequest;
 import com.mgabrynowicz.tictactoe.User.model.LoginResponse;
 import com.mgabrynowicz.tictactoe.User.model.RegisterRequest;
+import com.mgabrynowicz.tictactoe.game.model.JoinGameRequest;
 import com.mgabrynowicz.tictactoe.gamelist.model.CreateGameRequest;
 import com.mgabrynowicz.tictactoe.gamelist.model.CreateGameResponse;
 import com.mgabrynowicz.tictactoe.gamelist.model.GameResponse;
@@ -10,6 +11,7 @@ import com.mgabrynowicz.tictactoe.gamelist.model.GameResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -48,6 +50,13 @@ public interface TicTacToeApiClient {
     @POST("/plugin/ttt.game")
     @Headers("Content-Type: application/json")
     Call<CreateGameResponse> createGame(@Header("X-BB-Session") String token, @Body CreateGameRequest createGameRequest);
+
+    @DELETE("/plugin/ttt.leaveGame")
+    Call<ResponseBody> leaveGame(@Header("X-BB-Session") String token );
+
+    @POST("plugin/ttt.joinGame")
+    @Headers("Content-Type: application/json")
+    Call<ResponseBody> joinGame(@Header("X-BB-Session") String token, @Body JoinGameRequest joinGameRequest);
 
 
 

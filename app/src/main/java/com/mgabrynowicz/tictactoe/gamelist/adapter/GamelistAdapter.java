@@ -20,18 +20,21 @@ public class GamelistAdapter extends RecyclerView.Adapter<GamelistViewHolder> {
     private final Context context;
     private final List<Game> games;
     private final LayoutInflater layoutInflater;
+    private final ItemClickListener itemClickListener;
 
-    public GamelistAdapter(Context context, List<Game> games) {
+
+    public GamelistAdapter(Context context, List<Game> games, ItemClickListener itemClickListener) {
         this.context = context;
         this.games = games;
         layoutInflater = LayoutInflater.from(context);
+        this.itemClickListener = itemClickListener;
     }
 
 
     @Override
     public GamelistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.view_game_item, parent, false);
-        return new GamelistViewHolder(view);
+        return new GamelistViewHolder(view, itemClickListener);
     }
 
     @Override
@@ -41,11 +44,20 @@ public class GamelistAdapter extends RecyclerView.Adapter<GamelistViewHolder> {
         holder.gameCreator.setText(game.getCreator());
         holder.gameName.setText(game.getName());
         holder.gamePlayer.setText(game.getPlayer());
+        holder.setGame(game);
 
     }
 
     @Override
     public int getItemCount() {
         return games.size();
+    }
+
+
+    public interface ItemClickListener {
+
+        void itemClicked(Game game);
+
+
     }
 }

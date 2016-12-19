@@ -25,7 +25,7 @@ import butterknife.OnClick;
  * Created by RENT on 2016-12-17.
  */
 
-public class GamelistActivity extends AppCompatActivity implements LogoutAsyncTask.onLogoutListener, DownloadGamelistAsyncTask.OnGamelistDownloadListener {
+public class GamelistActivity extends AppCompatActivity implements LogoutAsyncTask.onLogoutListener, DownloadGamelistAsyncTask.OnGamelistDownloadListener, GamelistAdapter.ItemClickListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -61,7 +61,7 @@ public class GamelistActivity extends AppCompatActivity implements LogoutAsyncTa
     @Override
     public void gamesDownloaded(List<Game> games) {
 
-        GamelistAdapter gamelistAdapter = new GamelistAdapter(this,games);
+        GamelistAdapter gamelistAdapter = new GamelistAdapter(this,games, this);
         recyclerView.setAdapter(gamelistAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -80,6 +80,11 @@ public class GamelistActivity extends AppCompatActivity implements LogoutAsyncTa
     protected void onPause() {
         super.onPause();
         gamelistRefresher.close();
+
+    }
+
+    @Override
+    public void itemClicked(Game game) {
 
     }
 }

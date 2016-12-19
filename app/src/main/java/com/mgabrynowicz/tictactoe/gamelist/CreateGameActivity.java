@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mgabrynowicz.tictactoe.R;
+import com.mgabrynowicz.tictactoe.game.GameActivity;
 import com.mgabrynowicz.tictactoe.gamelist.async.CreateGameAsyncTask;
 import com.mgabrynowicz.tictactoe.gamelist.model.CreateGameRequest;
 import com.mgabrynowicz.tictactoe.gamelist.model.CreateGameResult;
@@ -50,7 +51,7 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameA
     public void onResult(CreateGameResult createGameResult) {
         if(createGameResult.getId() != null) {
 
-            startActivity(new Intent(this, GamelistActivity.class));
+            startActivity(new Intent(this, GameActivity.class));
             return;
         }
         Toast.makeText(this,createGameResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
