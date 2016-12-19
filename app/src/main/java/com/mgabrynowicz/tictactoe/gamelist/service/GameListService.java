@@ -1,6 +1,8 @@
 package com.mgabrynowicz.tictactoe.gamelist.service;
 
+import com.google.gson.Gson;
 import com.mgabrynowicz.tictactoe.User.service.UserService;
+import com.mgabrynowicz.tictactoe.apiclient.ErrorResponse;
 import com.mgabrynowicz.tictactoe.apiclient.TicTacToeApiClient;
 import com.mgabrynowicz.tictactoe.apiclient.TicTacToeApiClientFactory;
 import com.mgabrynowicz.tictactoe.gamelist.model.CreateGameRequest;
@@ -44,7 +46,10 @@ public class GameListService {
 
         if (!response.isSuccessful()) {
 
-            return new CreateGameResult(null, "Failed");
+            String responseBodyString = response.errorBody().string();
+            ErrorResponse errorResponse = new Gson().fromJson(responseBodyString, ErrorResponse.class);
+
+            return new CreateGameResult(null, errorResponse.getMessage());
 
         }
         return new CreateGameResult(id, null);

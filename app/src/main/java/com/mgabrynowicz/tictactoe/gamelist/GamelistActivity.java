@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.mgabrynowicz.tictactoe.R;
 import com.mgabrynowicz.tictactoe.User.activity.LoginActivity;
+import com.mgabrynowicz.tictactoe.User.async.GamelistRefresher;
 import com.mgabrynowicz.tictactoe.User.async.LogoutAsyncTask;
 import com.mgabrynowicz.tictactoe.gamelist.adapter.GamelistAdapter;
 import com.mgabrynowicz.tictactoe.gamelist.async.DownloadGamelistAsyncTask;
@@ -28,6 +29,7 @@ public class GamelistActivity extends AppCompatActivity implements LogoutAsyncTa
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    private GamelistRefresher gamelistRefresher;
 
 
     @Override
@@ -35,8 +37,6 @@ public class GamelistActivity extends AppCompatActivity implements LogoutAsyncTa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gamelist);
         ButterKnife.bind(this);
-
-        new DownloadGamelistAsyncTask(this).execute();
 
     }
     @OnClick(R.id.logout_button)
@@ -52,6 +52,7 @@ public class GamelistActivity extends AppCompatActivity implements LogoutAsyncTa
     }
 
 
+
     @Override
     public void onLogoutCompleted() {
         startActivity(new Intent(this, LoginActivity.class));
@@ -64,6 +65,21 @@ public class GamelistActivity extends AppCompatActivity implements LogoutAsyncTa
         recyclerView.setAdapter(gamelistAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gamelistRefresher = new GamelistRefresher();
+        gamelistRefresher.startRefreshing(this);
+        }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        gamelistRefresher.close();
 
     }
 }
