@@ -1,9 +1,14 @@
 package com.mgabrynowicz.tictactoe.game.service;
 
+import com.google.gson.Gson;
 import com.mgabrynowicz.tictactoe.User.service.UserService;
+import com.mgabrynowicz.tictactoe.apiclient.ErrorResponse;
 import com.mgabrynowicz.tictactoe.apiclient.TicTacToeApiClient;
 import com.mgabrynowicz.tictactoe.apiclient.TicTacToeApiClientFactory;
-import com.mgabrynowicz.tictactoe.game.model.JoinGameRequest;
+import com.mgabrynowicz.tictactoe.game.model.MakeMoveResult;
+import com.mgabrynowicz.tictactoe.game.model.MoveRequest;
+import com.mgabrynowicz.tictactoe.gamelist.model.Game;
+import com.mgabrynowicz.tictactoe.gamelist.model.GameResponse;
 
 import java.io.IOException;
 
@@ -33,15 +38,30 @@ public class GameService {
         }
     }
 
-    public void joinGame(JoinGameRequest joinGameRequest) throws IOException {
+    public Game getGameData(String gameId) throws IOException {
+        Response<GameResponse> response = ticTacToeApiClient.getGameData(userService.getToken(), gameId).execute();
 
-        Response<ResponseBody> response = ticTacToeApiClient.joinGame(userService.getToken(), joinGameRequest).execute();
-        if(!response.isSuccessful()) {
+        if (!response.isSuccessful()) {
+
             throw new RuntimeException();
         }
 
+        return response.body().getData().get(0);
+    }
+
+    public MakeMoveResult makeMove(MoveRequest moveRequest) throws IOException {
+        Response<ResponseBody> response = ticTacToeApiClient.makeMove(moveRequest, userService.getToken()).execute();
+
+        if(!response.isSuccessful()) {
+            String errorResponseBody = response.errorBody().string();
+            ErrorResponse errorResponse = new Gson().fromJson(errorResponseBody, ErrorResponse.class);
+            return new MakeMoveResult(errorResponse.getMessage());
+        }
+
+        return new MakeMoveResult();
 
     }
+
 
 }
 

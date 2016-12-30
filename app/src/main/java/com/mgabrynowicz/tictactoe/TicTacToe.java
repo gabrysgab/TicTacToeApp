@@ -18,7 +18,6 @@ public class TicTacToe {
     private Player currentPlayer;
     private Player firstPlayer;
     private Player secondPlayer;
-    private ComputerPlayer computerPlayer;
     private GameGrid gameGrid;
     private Boolean winner = null;
     private int[] winnerButtons;
@@ -89,7 +88,7 @@ public class TicTacToe {
     }
 
 
-    public void placeSignOnBoardAI(Button[] gameGridArray, Context context) {
+    public void placeSignOnBoardAI(List<Button> gameGridArray, Context context) {
         int position = 0;
 
         if(checkForWinningMove() != null) {
@@ -118,7 +117,7 @@ public class TicTacToe {
             }
 
             this.gameGrid.getGameGrid()[position] = currentPlayer.getSign();
-            setGridSign(gameGridArray[position]);
+            setGridSign(gameGridArray.get(position));
             this.emptyGrids.remove(this.emptyGrids.indexOf(position));
             endOfGame();
             changeTurn();
@@ -182,7 +181,7 @@ public class TicTacToe {
             }
             gameGrid.getGameGrid()[tmpIndex] = null;
         }
-        return winningMove;
+        return null;
     }
 
 
@@ -202,7 +201,7 @@ public class TicTacToe {
 
     }
 
-    public boolean endOfGame() {
+    private boolean endOfGame() {
 
         boolean boardFull = true;
         checkIfSomeoneWon();
@@ -230,7 +229,7 @@ public class TicTacToe {
 
     }
 
-    public void newGame() {
+    void newGame() {
 
         chooseStartingPlayer();
         this.gameGrid = new GameGrid();
@@ -253,15 +252,18 @@ public class TicTacToe {
         button.setText(sign);
     }
 
-    public boolean isGameOver() {
+    boolean isGameOver() {
         return gameOver;
     }
 
-    public int[] getWinnerButtons() {
+    int[] getWinnerButtons() {
         return winnerButtons;
     }
 
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+
+
+
 }

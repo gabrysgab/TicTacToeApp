@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.mgabrynowicz.tictactoe.GameActivity;
 import com.mgabrynowicz.tictactoe.R;
-import com.mgabrynowicz.tictactoe.game.GameActivity;
 import com.mgabrynowicz.tictactoe.gamelist.async.CreateGameAsyncTask;
 import com.mgabrynowicz.tictactoe.gamelist.model.CreateGameRequest;
 import com.mgabrynowicz.tictactoe.gamelist.model.CreateGameResult;

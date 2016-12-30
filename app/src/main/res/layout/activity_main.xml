@@ -20,7 +20,7 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:rowCount="3"
         android:layout_gravity="center_horizontal"
-        tools:context="com.mgabrynowicz.tictactoe.MainActivity">
+        tools:context="com.mgabrynowicz.tictactoe.GameActivity">
 
         <Button
             android:id="@+id/gameGrid0"
@@ -106,6 +106,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="New Game" />
+
+    <Button
+        android:id="@+id/leaveGameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Leave Game"/>
 
 
 </LinearLayout>

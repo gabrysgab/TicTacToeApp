@@ -1,5 +1,7 @@
 package com.mgabrynowicz.tictactoe.gamelist.model;
 
+import java.util.List;
+
 /**
  * Created by RENT on 2016-12-17.
  */
@@ -10,12 +12,16 @@ public class Game {
     private final String name;
     private final String creator;
     private final String player;
+    private final List<Move> movesOwner;
+    private final List<Move> movesPlayer;
 
-    public Game(String id, String name, String creator, String player) {
+    public Game(String id, String name, String creator, String player, List<Move> movesOwner, List<Move> movesPlayer) {
         this.id = id;
         this.name = name;
         this.creator = creator;
         this.player = player;
+        this.movesOwner = movesOwner;
+        this.movesPlayer = movesPlayer;
     }
 
     public String getId() {
@@ -32,5 +38,13 @@ public class Game {
 
     public String getPlayer() {
         return player;
+    }
+
+    public List<Move> getMovesOwner() {
+        return movesOwner;
+    }
+
+    public List<Move> getMovesPlayer() {
+        return movesPlayer;
     }
 }
