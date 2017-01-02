@@ -7,7 +7,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by RENT on 2016-12-03.
@@ -36,9 +35,15 @@ public class TicTacToe {
     }
 
 
-    private void chooseStartingPlayer() {
+    private void chooseStartingPlayer(boolean playerType) {
 
-        currentPlayer = firstPlayer;
+        if(playerType == true) {
+            currentPlayer = firstPlayer;
+            return;
+        }
+        currentPlayer = secondPlayer;
+        return;
+
 
 
     }
@@ -53,7 +58,7 @@ public class TicTacToe {
         }
     }
 
-    public void placeSignOnTheBoard(Button button, Context context) {
+    public void placeSignOnTheBoard(Button button, Context context, boolean playerType) {
 
         int position = 0;
 
@@ -67,74 +72,74 @@ public class TicTacToe {
                 return;
             }
 
-            this.gameGrid.getGameGrid()[position] = currentPlayer.getSign();
+            this.gameGrid.getGameGrid()[position] = playerType;
             this.emptyGrids.remove(this.emptyGrids.indexOf(position));
-            setGridSign(button);
+            setGridSign(button, playerType);
             endOfGame();
-            changeTurn();
+            //changeTurn();
         }
-        if (isGameOver()) {
-            if (this.winner == null) {
-
-                Toast.makeText(context, "Draw", Toast.LENGTH_SHORT).show();
-            } else {
-                announceWinner(this.winner, context);
-
-            }
-
-        }
+//        if (isGameOver()) {
+//            if (this.winner == null) {
+//
+//                Toast.makeText(context, "Draw", Toast.LENGTH_SHORT).show();
+//            } else {
+//                announceWinner(this.winner, context);
+//
+//            }
+//
+//        }
 
 
     }
 
-
-    public void placeSignOnBoardAI(List<Button> gameGridArray, Context context) {
-        int position = 0;
-
-        if(checkForWinningMove() != null) {
-
-            position = checkForWinningMove();
-        }
-        else {
-            Random randomGenerator = new Random();
-
-
-            if (emptyGrids.size() == 1) {
-
-                position = emptyGrids.get(0);
-            } else if (emptyGrids.isEmpty()) {
-                //do nothing
-
-            } else {
-                int index = randomGenerator.nextInt(emptyGrids.size());
-                position = emptyGrids.get(index);
-            }
-        }
-        if (!isGameOver()) {
-
-            if (!(this.gameGrid.getGameGrid()[position] == null)) {
-                return;
-            }
-
-            this.gameGrid.getGameGrid()[position] = currentPlayer.getSign();
-            setGridSign(gameGridArray.get(position));
-            this.emptyGrids.remove(this.emptyGrids.indexOf(position));
-            endOfGame();
-            changeTurn();
-        }
-        if (isGameOver()) {
-            if (this.winner == null) {
-
-                Toast.makeText(context, "Draw", Toast.LENGTH_SHORT).show();
-            } else {
-                announceWinner(this.winner, context);
-
-            }
-
-        }
-
-
-    }
+//
+//    public void placeSignOnBoardAI(List<Button> gameGridArray, Context context) {
+//        int position = 0;
+//
+//        if(checkForWinningMove() != null) {
+//
+//            position = checkForWinningMove();
+//        }
+//        else {
+//            Random randomGenerator = new Random();
+//
+//
+//            if (emptyGrids.size() == 1) {
+//
+//                position = emptyGrids.get(0);
+//            } else if (emptyGrids.isEmpty()) {
+//                //do nothing
+//
+//            } else {
+//                int index = randomGenerator.nextInt(emptyGrids.size());
+//                position = emptyGrids.get(index);
+//            }
+//        }
+//        if (!isGameOver()) {
+//
+//            if (!(this.gameGrid.getGameGrid()[position] == null)) {
+//                return;
+//            }
+//
+//            this.gameGrid.getGameGrid()[position] = currentPlayer.getSign();
+//            setGridSign(gameGridArray.get(position));
+//            this.emptyGrids.remove(this.emptyGrids.indexOf(position));
+//            endOfGame();
+//            changeTurn();
+//        }
+//        if (isGameOver()) {
+//            if (this.winner == null) {
+//
+//                Toast.makeText(context, "Draw", Toast.LENGTH_SHORT).show();
+//            } else {
+//                announceWinner(this.winner, context);
+//
+//            }
+//
+//        }
+//
+//
+//    }
 
 
     private void setCurrentPlayer(Player currentPlayer) {
@@ -156,33 +161,33 @@ public class TicTacToe {
             }
         }
     }
-    private Integer checkForWinningMove() {
-        Integer winningMove = null;
-
-        for(Integer tmpIndex : emptyGrids) {
-
-            gameGrid.getGameGrid()[tmpIndex] = true;
-
-
-
-
-            for (int[] win : winStates) {
-
-                if (gameGrid.getGameGrid()[win[0]] == null || gameGrid.getGameGrid()[win[1]] == null || gameGrid.getGameGrid()[win[2]] == null) {
-                    continue;
-                }
-                if (gameGrid.getGameGrid()[win[0]].equals(gameGrid.getGameGrid()[win[1]]) && gameGrid.getGameGrid()[win[1]].equals(gameGrid.getGameGrid()[win[2]])) {
-
-                    winningMove = tmpIndex;
-                    gameGrid.getGameGrid()[tmpIndex] = null;
-                    return winningMove;
-
-                }
-            }
-            gameGrid.getGameGrid()[tmpIndex] = null;
-        }
-        return null;
-    }
+//    private Integer checkForWinningMove() {
+//        Integer winningMove = null;
+//
+//        for(Integer tmpIndex : emptyGrids) {
+//
+//            gameGrid.getGameGrid()[tmpIndex] = true;
+//
+//
+//
+//
+//            for (int[] win : winStates) {
+//
+//                if (gameGrid.getGameGrid()[win[0]] == null || gameGrid.getGameGrid()[win[1]] == null || gameGrid.getGameGrid()[win[2]] == null) {
+//                    continue;
+//                }
+//                if (gameGrid.getGameGrid()[win[0]].equals(gameGrid.getGameGrid()[win[1]]) && gameGrid.getGameGrid()[win[1]].equals(gameGrid.getGameGrid()[win[2]])) {
+//
+//                    winningMove = tmpIndex;
+//                    gameGrid.getGameGrid()[tmpIndex] = null;
+//                    return winningMove;
+//
+//                }
+//            }
+//            gameGrid.getGameGrid()[tmpIndex] = null;
+//        }
+//        return null;
+//    }
 
 
     private void announceWinner(Boolean sign, Context context) {
@@ -229,9 +234,9 @@ public class TicTacToe {
 
     }
 
-    void newGame() {
+    void newGame(boolean playerType) {
 
-        chooseStartingPlayer();
+        chooseStartingPlayer(playerType);
         this.gameGrid = new GameGrid();
         this.winner = null;
         this.winnerButtons = null;
@@ -240,10 +245,10 @@ public class TicTacToe {
 
     }
 
-    private void setGridSign(Button button) {
+    private void setGridSign(Button button, boolean playerType) {
         String sign = "";
 
-        if (currentPlayer.getSign().equals(true)) {
+        if (playerType == true) {
             sign = "O";
         } else {
             sign = "X";

@@ -50,8 +50,10 @@ public class CreateGameActivity extends AppCompatActivity implements CreateGameA
     @Override
     public void onResult(CreateGameResult createGameResult) {
         if(createGameResult.getId() != null) {
-
-            startActivity(new Intent(this, GameActivity.class));
+            Intent intent = new Intent(CreateGameActivity.this, GameActivity.class);
+            intent.putExtra("isOwner", true);
+            intent.putExtra("gameId", createGameResult.getId());
+            startActivity(intent);
             return;
         }
         Toast.makeText(this,createGameResult.getErrorMessage(), Toast.LENGTH_SHORT).show();

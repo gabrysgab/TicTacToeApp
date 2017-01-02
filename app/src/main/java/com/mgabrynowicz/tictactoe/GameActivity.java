@@ -73,7 +73,7 @@ public class GameActivity extends AppCompatActivity implements LeaveGameAsyncTas
             setMoveClickListener(grid, i);
         }
 
-        game.newGame();
+        game.newGame(isOwner);
     }
 
 
@@ -87,18 +87,18 @@ public class GameActivity extends AppCompatActivity implements LeaveGameAsyncTas
     }
 
 
-    @OnClick(R.id.newGameButton)
-    public void newGameClick(View view) {
-        game.newGame();
-
-        for (Button tmpButton : gameGridArray) {
-
-            tmpButton.setText("");
-            tmpButton.getBackground().clearColorFilter();
-        }
-
-
-    }
+//    @OnClick(R.id.newGameButton)
+//    public void newGameClick(View view) {
+//        game.newGame(isOwner);
+//
+//        for (Button tmpButton : gameGridArray) {
+//
+//            tmpButton.setText("");
+//            tmpButton.getBackground().clearColorFilter();
+//        }
+//
+//
+//    }
 
     @OnClick(R.id.leaveGameButton)
     public void leaveGameClick(View view) {
@@ -149,19 +149,21 @@ public class GameActivity extends AppCompatActivity implements LeaveGameAsyncTas
             return;
         }
         gameState = game;
-        printGameData(game);
+        printGameData(game, this.game);
     }
 
-    private void printGameData(Game game) {
+    private void printGameData(Game game, TicTacToe gameBoard) {
 
         //Todo implement this function to print move on the board
 
         for (Move move : game.getMovesOwner()) {
+            gameBoard.placeSignOnTheBoard(gameGridArray.get(move.toBoardFieldNumber()-1),this, true);
 
         }
         for (Move move : game.getMovesPlayer()) {
-
+            gameBoard.placeSignOnTheBoard(gameGridArray.get(move.toBoardFieldNumber()-1),this, false);
         }
+        higlightWinningButtons();
     }
 
     @Override
@@ -196,7 +198,7 @@ public class GameActivity extends AppCompatActivity implements LeaveGameAsyncTas
 
     private void printSingleMove(int i) {
 
-        game.placeSignOnTheBoard(gameGridArray.get(i), this);
+        game.placeSignOnTheBoard(gameGridArray.get(i), this, isOwner);
 
     }
 
